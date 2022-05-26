@@ -1,13 +1,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import {createStore} from 'redux';
+
+import {data} from './util/data'
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import './util/bootstrap.css';
+import './index.css';
+import movies from './reducers/index';
+import {addMovies} from './actions';
+
+const store=createStore(movies);
+// store.dispatch(addMovies(data));
+// console.log(store.getState());
+// console.log(store.getState())
+// console.log(store)
+// store.dispatch({
+//   type:"ADD_MOVIES",
+//   movies
+// });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <App store={store}/>
   </React.StrictMode>
 );
 
