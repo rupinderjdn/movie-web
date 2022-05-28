@@ -14,16 +14,17 @@ class App extends React.Component {
     store.subscribe(() => {
       // console.log("UPDATED")
       // will be called after dispatch function
+      console.log("State", this.props.store.getState())
       this.forceUpdate();
-      console.log(store.getState());
+      // console.log(store.getState());
       // this function should not be used in general
     })
-
+    
     // ideally we should avoid hardcoding dispatch function
   }
   isMovieFavourite(movie) {
-    const { favourites } = this.props.store.getState();
-
+    const { movies } = this.props.store.getState();
+    const {favourites }= movies;
     return favourites.indexOf(movie) >= 0;
   }
   changeTab(val){
@@ -32,19 +33,22 @@ class App extends React.Component {
   render() {
     // return 'a';
     // componentDidMount()
-    const { list, favourites, showFavourites } = this.props.store.getState(); // {list,favourites}
-    const movies = showFavourites ? favourites : list;
+    const {movies,search} = this.props.store.getState(); // {movies : {list,favourites,showFavourites} , search : {results}}
+
+    const {list, favourites, showFavourites} = movies
+
+    const displayMovies = showFavourites ? favourites : list;
     return (
       <div className="App">
-        <Navbar />
+        <Navbar store ={this.props.store} search={search}/>
         <div className="container-fluid">
           <div className="container row">
-            <div className="col-md-6 text-center fs-4 "><button className="btn btn-primary" onClick={() => this.changeTab(false)}>Movies</button></div>
-            <div className="col-md-6 text-center fs-4 "><button className="btn btn-primary" onClick={() => this.changeTab(true)}>Favourites</button></div>
+            <div className="col-md-6  fs-4 "><button className="btn btn-primary" onClick={() => this.changeTab(false)}>Movies</button></div>
+            <div className="col-md-6  fs-4 "><button className="btn btn-primary" onClick={() => this.changeTab(true)}>Favourites</button></div>
         </div>
         <ul className="list-group">
           <li className="list-group-item">{
-            movies.map((movie, index) => (
+            displayMovies.map((movie, index) => (
               <MovieCard
                 movie={movie}
                 key={index}
